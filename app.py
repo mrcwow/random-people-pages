@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = "SECRET_KEY"
 
 client = MongoClient(app.config["MONGO_URI"])
 db = client.random_users
-users_collection = db.users
+app.users_collection = db.users
 
 def get_random_users(count):
     try:
@@ -30,7 +30,7 @@ def add_random_users(count):
         return f"No users added, error 424 {users[1]}", 424
     else:
         try:
-            users_collection.insert_many(users)
+            app.users_collection.insert_many(users)
         except Exception as e:
             print(f"Error add: {str(e)}", flush=True)
             return f"Error 500: {str(e)}", 500
@@ -58,13 +58,13 @@ def index():
             except Exception as e:
                 print(f"Error page to go: {str(e)}", flush=True)
     try:
-        users = users_collection.find().skip((page - 1) * users_per_page).limit(users_per_page)
+        users = app.users_collection.find().skip((page - 1) * users_per_page).limit(users_per_page)
     except Exception as e:
         print(f"Error find: {str(e)}", flush=True)
         return f"Error 500: {str(e)}", 500
     
     try:
-        total_users = users_collection.count_documents({})
+        total_users = app.users_collection.count_documents({})
     except Exception as e:
         print(f"Error count: {str(e)}", flush=True)
         return f"Error 500: {str(e)}", 500
@@ -82,7 +82,7 @@ def index():
 @app.route("/homepage/<user_id>")
 def user_page(user_id):
     try:
-        user = users_collection.find_one({"login.uuid": user_id})
+        user = app.users_collection.find_one({"login.uuid": user_id})
         if not user:
             print("User not found", flush=True)
             return "User not found", 404
@@ -95,7 +95,7 @@ def user_page(user_id):
 @app.route("/homepage/random")
 def random_user():
     try:
-        user = users_collection.aggregate([{ "$sample": { "size": 1 } }]).next()
+        user = app.users_collection.aggregate([{ "$sample": { "size": 1 } }]).next()
         return render_template("user.html", user=user, page=1)
     except StopIteration:
         print("No users available", flush=True)
@@ -108,4 +108,4 @@ if __name__ == "__main__":
     with app.app_context():
         print("Initialization during start server...")
         add_random_users(1000)
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
