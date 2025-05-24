@@ -41,7 +41,7 @@ jobs:
 
       - name: Stop server
         if: always()
-        run: docker compose -f server/docker-compose.yml down    
+        run: docker compose -f docker-compose.yml down    
 
       - name: Run tests
         run: |
