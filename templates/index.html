@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Random Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="page">
+        <h1>Random Users</h1>
+        <form method="POST" class="add-form">
+            <input type="number" name="add_num" class="add_num" placeholder="Number of users" min="1">
+            <button type="submit">Add users</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Gender</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Location</th>
+                    <th>Photo</th>
+                    <th>Page</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.gender }}</td>
+                        <td>{{ user.name.first }}</td>
+                        <td>{{ user.name.last }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.location.city }}, {{ user.location.state }}, {{ user.location.country }}</td>
+                        <td><img src="{{ user.picture.thumbnail }}" alt="User thumbnail" class="thumbnail"></td>
+                        <td><a href="/homepage/{{ user.login.uuid }}?page={{ page }}" class="user-page-link">Go to</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <span class="total-pages">Total pages: {{ total_pages }}</span>
+        <form method="POST" class="page-go-form">
+            <input type="number" name="page_to_go" class="page_to_go" placeholder="Page to go" min="1" max="{{ total_pages }}">
+            <button type="submit">Go</button>
+        </form>
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="/homepage?page=1" class="page-link">First</a>
+                <a href="/homepage?page={{ page - 1 }}" class="page-link">Previous</a>
+            {% endif %}
+            {% for p in pages %}
+                <a href="/homepage?page={{ p }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+            {% if page < total_pages %}
+                <a href="/homepage?page={{ page + 1 }}" class="page-link">Next</a>
+                <a href="/homepage?page={{ total_pages }}" class="page-link">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

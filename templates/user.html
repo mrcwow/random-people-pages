@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ user.name.first }} {{ user.name.last }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="page">
+        <h1>User Page</h1>
+        <div class="user-page">
+            <p><img src="{{ user.picture.large }}" alt="User photo" class="user-photo"></p>
+            <p><strong>Id:</strong> {{ user.login.uuid }}</p>
+            <p><strong>Gender:</strong> {{ user.gender }}</p>
+            <p><strong>First Name:</strong> {{ user.name.first }}</p>
+            <p><strong>Last Name:</strong> {{ user.name.last }}</p>
+            <p><strong>Phone:</strong> {{ user.phone }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Location:</strong> {{ user.location.city }}, {{ user.location.state }}, {{ user.location.country }}</p>
+            <a href="/homepage?page={{ page }}" class="back-link">Back to Table</a>
+        </div>
+    </div>
+</body>
+</html>
