@@ -69,4 +69,4 @@ https://github.com/mrcwow/Automated-web-application-testing-system
 Проект "Локальный прокторинг":
 https://github.com/moevm/mse1h2025-prctr
 
-И другие проекты, в том числе веб-приложения, можно найти в профилях GitHub.
+И другие проекты, в том числе веб-приложения, можно найти в моих профилях GitHub.
